@@ -1,10 +1,9 @@
-
-FROM jboss/wildfly:13.0.0.Final
+FROM jboss/wildfly:latest
 
 LABEL com.terawhars.version="0.0.1-snapshot"
-LABEL author="Edward P. Legaspi"
-LABEL email="czetsuya@gmail.com"
-LABEL com.terawhars.release-date="2019-08-20"
+LABEL author="Pasante Astroent"
+LABEL email="pasante@astronet.com"
+LABEL com.terawhars.release-date="2021-02-24"
 
 # Set Postgresql env variables
 ENV DB_HOST postgres
@@ -30,7 +29,8 @@ RUN ./wildfly-command.sh \
     &&  rm -rf $JBOSS_HOME/standalone/configuration/standalone_xml_history/
 
 # Download and deploy the war file
-ADD https://github.com/czetsuya/javaee6-docker-web/releases/download/1.0.0/javaee6-webapp.war $JBOSS_HOME/standalone/deployments
+ADD CallCenterAstronet.war $JBOSS_HOME/standalone/deployments
+#VOLUME opt/jboss/wildfly/standalone/deployments
 
 # Create Wildfly admin user
 RUN $JBOSS_HOME/bin/add-user.sh admin admin --silent
@@ -38,3 +38,4 @@ RUN $JBOSS_HOME/bin/add-user.sh admin admin --silent
 # Set the default command to run on boot
 # This will boot WildFly in the standalone mode and bind to all interface
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-b", "0.0.0.0", "-bmanagement", "0.0.0.0"]
+
