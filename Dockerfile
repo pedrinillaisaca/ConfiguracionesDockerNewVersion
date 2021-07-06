@@ -1,19 +1,17 @@
 FROM jboss/wildfly:latest
 
-LABEL com.terawhars.version="0.0.1-snapshot"
-LABEL author="Pasante Astroent"
-LABEL email="pasante@astronet.com"
-LABEL com.terawhars.release-date="2021-02-24"
+LABEL author="Pedro Illaisaca"
+
 
 # Set Postgresql env variables
 ENV DB_HOST postgres
 ENV DB_PORT 5432
-ENV DB_NAME terawhars
-ENV DB_USER terawhars
-ENV DB_PASS terawhars
+ENV DB_NAME astronet
+ENV DB_USER postgres
+ENV DB_PASS 12345
 
-ENV DS_NAME TeraWHARSDS
-ENV JNDI_NAME java:jboss/datasources/TeraWHARSDS
+ENV DS_NAME pedro
+ENV JNDI_NAME java:/pedro
 
 USER root
 
@@ -30,7 +28,7 @@ RUN ./wildfly-command.sh \
 
 # Download and deploy the war file
 ADD CallCenterAstronet.war $JBOSS_HOME/standalone/deployments
-#VOLUME opt/jboss/wildfly/standalone/deployments
+VOLUME /opt/jboss/wildfly/standalone/deployments
 
 # Create Wildfly admin user
 RUN $JBOSS_HOME/bin/add-user.sh admin admin --silent

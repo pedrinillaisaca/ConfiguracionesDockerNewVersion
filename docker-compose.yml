@@ -2,18 +2,20 @@ version: '3'
 services:
     postgres:
         image: postgres:latest
-        container_name: postgres
+        container_name: postgresPractica
         ports:
           - "5432:5432"
         environment:
             - LC_ALL=C.UTF-8
-            - POSTGRES_DB=terawhars
-            - POSTGRES_USER=terawhars
-            - POSTGRES_PASSWORD=terawhars
+            - POSTGRES_DB=astronet
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=12345
             - POSTGRES_PORT=5432
+        volumes:
+            - $PWD/input_files/import-postgres.sql:/docker-entrypoint-initdb.d/import-postgres.sql
     wildfly:
-        image: terawhars
-        container_name: wildfly
+        image: wildflyimagepractica
+        container_name: wildflyPractica
         build: .
         ports:
             - "8080:8080"
@@ -21,29 +23,15 @@ services:
         environment:
             - DB_HOST=postgres
             - DB_PORT=5432
-            - DB_NAME=terawhars
-            - DB_USER=terawhars
-            - DB_PASS=terawhars
-            - DS_NAME=TeraWHARSDS
-            - JNDI_NAME=java:jboss/datasources/TeraWHARSDS
+            - DB_NAME=astronet
+            - DB_USER=postgres
+            - DB_PASS=12345
+            - DS_NAME:pedro
+            - JNDI_NAME=java:/pedro
         depends_on:
             - postgres
         volumes:
-            - jboss-conf:/opt/jboss/wildfly/standalone/deployments
-    pgAdmin:
-        image: dpage/pgadmin4:latest
-        container_name: pgAdmin
-        ports:
-            - "5555:80"
-        environment:
-            - PGADMIN_DEFAULT_EMAIL=pedro@illaisaca.com
-            - PGADMIN_DEFAULT_PASSWORD=pedro@illaisaca.com
-        depends_on:
-            - postgres
-        volumes:
-            - volumePG_Admin:/var/lib/pgadmin
-volumes:
-    jboss-conf:
-    volumePG_Admin:
-        external: true
+            - jboss-volume:/opt/jboss/wildfly/standalone/deployments
 
+volumes:
+    jboss-volume: {}
