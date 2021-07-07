@@ -1,5 +1,10 @@
 version: '3'
 services:
+    reverseproxy:
+        build: ./configProxy
+        ports:
+            - 8181:8181
+
     postgres:
         image: postgres:latest
         container_name: postgresPractica
@@ -30,6 +35,7 @@ services:
             - JNDI_NAME=java:/pedro
         depends_on:
             - postgres
+            - reverseproxy
         volumes:
             - jboss-volume:/opt/jboss/wildfly/standalone/deployments
 
